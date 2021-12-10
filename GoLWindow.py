@@ -2,7 +2,9 @@ from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow, QStyleFactory
 
 from Action import Action
+from FPSSlider import FPSSlider
 from InfoWindow import InfoWindow
+from HelpWindow import HelpWindow
 
 
 class GoLWindow(QMainWindow):
@@ -59,9 +61,14 @@ class GoLWindow(QMainWindow):
         self._toolbar.addAction(self._play_action)
         self._toolbar.addAction(self._stop_action)
 
+        self._slider = FPSSlider()
+        self._toolbar.addWidget(self._slider)
+
         """Secondary windows"""
         self._info_window = InfoWindow(self, self.style.standardIcon(self.style.SP_MessageBoxInformation))
+        self._help_window = HelpWindow(self.style.standardIcon(self.style.SP_DialogHelpButton))
 
         """Slots binding"""
         self._exit_action.triggered.connect(self.close)
         self._info_action.triggered.connect(self._info_window.show)
+        self._help_action.triggered.connect(self._help_window.show)
