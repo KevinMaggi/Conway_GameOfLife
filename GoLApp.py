@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication
 
+from GoLController import GoLController
 from GoLWindow import GoLWindow
 
 
@@ -8,10 +9,12 @@ class GoLApp(QApplication):
         if args is None:
             args = []
 
-        QApplication.setStyle('Fusion')  # Windows, WindowsXP, WindowsVista, Fusion
+        QApplication.setStyle('Fusion')
         super().__init__(args)
 
-        window = GoLWindow()
-        window.show()
+        view = GoLWindow()
+        view.show()
+
+        controller = GoLController(view)
 
         self.exec_()
