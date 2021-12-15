@@ -14,11 +14,14 @@ class GoLApp(QApplication):
         QApplication.setStyle('Fusion')
         super().__init__(args)
 
+        # [MODEL]
         model = GoLModel(Parameters.BOARD_INITIAL_SIZE)
 
+        # [VIEW]
         view = GoLWindow()
         view.show()
 
+        # [CONTROLLER]
         controller = GoLController(view, model)
 
         self.exec_()

@@ -10,6 +10,12 @@ import Parameters
 
 
 class GoLWindow(QMainWindow):
+    """
+    [VIEW]
+
+    Main window of GoLApp. It contains all the view elements, also secondary windows, etc.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -82,7 +88,7 @@ class GoLWindow(QMainWindow):
         self._toolbar.addAction(self._pause_action)
         self._toolbar.addAction(self._next_action)
 
-        """Secondary windows"""
+        """Secondary windows & dialog"""
         self.info_window = InfoWindow(self, self.style.standardIcon(self.style.SP_MessageBoxInformation))
         self.help_window = HelpWindow(self.style.standardIcon(self.style.SP_DialogHelpButton))
         self.clear_confirm = QMessageBox(QMessageBox.Question, "Are you sure?",
@@ -98,61 +104,136 @@ class GoLWindow(QMainWindow):
 
     """Action connection"""
 
+    def connect_save(self, slot):
+        """
+        It allow to connect to save action
+        :param slot: function to invoke
+        :return: None
+        """
+        self._save_action.triggered.connect(slot)
+
+    def connect_open(self, slot):
+        """
+        It allow to connect to open action
+        :param slot: function to invoke
+        :return: None
+        """
+        self._open_action.triggered.connect(slot)
+
     def connect_exit(self, slot):
+        """
+        It allow to connect to exit action
+        :param slot: function to invoke
+        :return: None
+        """
         self._exit_action.triggered.connect(slot)
 
     def connect_info(self, slot):
+        """
+        It allow to connect to info action
+        :param slot: function to invoke
+        :return: None
+        """
         self._info_action.triggered.connect(slot)
 
     def connect_help(self, slot):
+        """
+        It allow to connect to help action
+        :param slot: function to invoke
+        :return: None
+        """
         self._help_action.triggered.connect(slot)
 
-    def connect_size(self, slot):
-        self.size_slider.connect(slot)
-
     def connect_clear(self, slot):
+        """
+        It allow to connect to clear action
+        :param slot: function to invoke
+        :return: None
+        """
         self._clear_action.triggered.connect(slot)
 
-    def connect_next(self, slot):
-        self._next_action.triggered.connect(slot)
+    def connect_size(self, slot):
+        """
+        It allow to connect to size change action
+        :param slot: function to invoke
+        :return: None
+        """
+        self.size_slider.connect(slot)
 
     def connect_run(self, slot):
+        """
+        It allow to connect to run action
+        :param slot: function to invoke
+        :return: None
+        """
         self._run_action.triggered.connect(slot)
 
-    def connect_pause(self, slot):
-        self._pause_action.triggered.connect(slot)
-
     def connect_fps(self, slot):
+        """
+        It allow to connect to FPS change action
+        :param slot: function to invoke
+        :return: None
+        """
         self.fps_slider.connect(slot)
 
-    """Utility"""
+    def connect_pause(self, slot):
+        """
+        It allow to connect to pause action
+        :param slot: function to invoke
+        :return: None
+        """
+        self._pause_action.triggered.connect(slot)
+
+    def connect_next(self, slot):
+        """
+        It allow to connect to next action
+        :param slot: function to invoke
+        :return: None
+        """
+        self._next_action.triggered.connect(slot)
+
+    """Status handling"""
 
     def running_on(self):
+        """
+        It enables/disables the right actions for simulation running status
+        :return: None
+        """
         self._status_bar.addPermanentWidget(self._running_msg)
 
         self._pause_action.setEnabled(True)
 
-        self._run_action.setDisabled(True)
-        self._next_action.setDisabled(True)
         self._save_action.setDisabled(True)
         self._open_action.setDisabled(True)
         self._clear_action.setDisabled(True)
         self.size_slider.setDisabled(True)
+        self._run_action.setDisabled(True)
+        self._next_action.setDisabled(True)
 
     def running_off(self):
+        """
+        It enables/disables the right actions for simulation not running status
+        :return: None
+        """
         self._status_bar.removeWidget(self._running_msg)
+        self._running_msg = QLabel(self._running_msg.text())
 
-        self._run_action.setEnabled(True)
-
+        self.size_slider.setDisabled(True)
         self._pause_action.setDisabled(True)
-        self._next_action.setEnabled(True)
+
         self._save_action.setEnabled(True)
         self._open_action.setEnabled(True)
         self._clear_action.setEnabled(True)
-        self.size_slider.setDisabled(True)
+        self._run_action.setEnabled(True)
+        self._next_action.setEnabled(True)
 
     def set_empty(self):
+        """
+        It enables/disables the right actions for empty board status
+        :return: None
+        """
         self.size_slider.setEnabled(True)
+
         self._clear_action.setDisabled(True)
         self._run_action.setDisabled(True)
         self.fps_slider.setDisabled(True)
@@ -160,12 +241,17 @@ class GoLWindow(QMainWindow):
         self._next_action.setDisabled(True)
 
     def set_not_empty(self, running):
+        """
+        It enables/disables the right actions for not empty board status
+        :return: None
+        """
         self.size_slider.setDisabled(True)
-        self._clear_action.setEnabled(True)
-        self._run_action.setEnabled(True)
+
         self.fps_slider.setEnabled(True)
 
         if running:
             self._next_action.setDisabled(True)
         else:
+            self._clear_action.setEnabled(True)
             self._next_action.setEnabled(True)
+            self._run_action.setEnabled(True)

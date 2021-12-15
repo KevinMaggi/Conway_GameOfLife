@@ -6,6 +6,7 @@ class InfoWindow(QDialog):
     """
     Info dialog
     """
+
     def __init__(self, parent, icon):
         super().__init__(parent, QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowCloseButtonHint)
 
