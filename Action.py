@@ -5,6 +5,7 @@ class Action(QAction):
     """
     A QAction complete with tips and shortcuts
     """
+
     def __init__(self, parent, name, tip, shortcuts, icon=None):
         """
         :param parent: parent

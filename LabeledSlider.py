@@ -12,6 +12,7 @@ class LabeledSlider(QWidget):
     """
 
     """ [VIEW] """
+
     def __init__(self, name, min_value, max_value, interval, value):
         super().__init__()
         self._name = name
@@ -37,6 +38,13 @@ class LabeledSlider(QWidget):
     def connect(self, slot):
         self._slider.valueChanged.connect(slot)
 
+    def value(self):
+        return self._slider.value() * self.interval
+
+    def set_value(self, new):
+        self._slider.setValue(new)
+
     """ [CONTROLLER] """
+
     def _update_label(self):
         self._label.setText(self._name + ": " + str(self._slider.value() * self.interval))

@@ -1,7 +1,9 @@
 from PyQt5.QtWidgets import QApplication
 
 from GoLController import GoLController
+from GoLModel import GoLModel
 from GoLWindow import GoLWindow
+import Parameters
 
 
 class GoLApp(QApplication):
@@ -12,9 +14,11 @@ class GoLApp(QApplication):
         QApplication.setStyle('Fusion')
         super().__init__(args)
 
+        model = GoLModel(Parameters.BOARD_INITIAL_SIZE)
+
         view = GoLWindow()
         view.show()
 
-        controller = GoLController(view)
+        controller = GoLController(view, model)
 
         self.exec_()

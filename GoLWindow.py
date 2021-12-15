@@ -1,11 +1,12 @@
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QMainWindow, QStyleFactory
+from PyQt5.QtWidgets import QMainWindow, QStyleFactory, QMessageBox
 
 from Action import Action
 from LabeledSlider import LabeledSlider
 from InfoWindow import InfoWindow
 from HelpWindow import HelpWindow
 from GoLBoard import GoLBoard
+import Parameters
 
 
 class GoLWindow(QMainWindow):
@@ -15,7 +16,7 @@ class GoLWindow(QMainWindow):
         """Top level window configuration"""
         self.setWindowTitle("Conway's Game of Life")
         self.setWindowIcon(QtGui.QIcon('img/boat.png'))
-        self.setFixedSize(760, 880)
+        self.setFixedSize(Parameters.BOARD_PX_DIM + 10, Parameters.BOARD_PX_DIM + 130)
         self.style = QStyleFactory.create("Fusion")
         self.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
 
@@ -40,8 +41,9 @@ class GoLWindow(QMainWindow):
                                     self.style.standardIcon(self.style.SP_LineEditClearButton))
 
         """Controls"""
-        self._fps_slider = LabeledSlider("FPS", 1, 15, 1, 2)
-        self._size_slider = LabeledSlider("Board size", 25, 100, 5, 75)
+        self.fps_slider = LabeledSlider("FPS", 1, 15, 1, 2)
+        self.size_slider = LabeledSlider("Board size", Parameters.BOARD_MIN_SIZE, Parameters.BOARD_MAX_SIZE,
+                                         Parameters.BOARD_STEP_SIZE, Parameters.BOARD_INITIAL_SIZE)
 
         """Status bar"""
         self._status_bar = self.statusBar()
@@ -72,20 +74,25 @@ class GoLWindow(QMainWindow):
         self._toolbar.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
 
         self._toolbar.addAction(self._clear_action)
-        self._toolbar.addWidget(self._size_slider)
+        self._toolbar.addWidget(self.size_slider)
         self._toolbar.addSeparator()
         self._toolbar.addAction(self._run_action)
-        self._toolbar.addWidget(self._fps_slider)
+        self._toolbar.addWidget(self.fps_slider)
         self._toolbar.addAction(self._pause_action)
         self._toolbar.addAction(self._next_action)
 
         """Secondary windows"""
         self.info_window = InfoWindow(self, self.style.standardIcon(self.style.SP_MessageBoxInformation))
         self.help_window = HelpWindow(self.style.standardIcon(self.style.SP_DialogHelpButton))
+        self.clear_confirm = QMessageBox(QMessageBox.Question, "Are you sure?",
+                                         "The board will be cleared and it will be impossible to undo the operation",
+                                         QMessageBox.Cancel | QMessageBox.Ok, self)
 
         """Board"""
-        self._board = GoLBoard(self, 50, 750)
-        self.setCentralWidget(self._board)
+        self.board = GoLBoard(self, Parameters.BOARD_PX_DIM)
+        self.setCentralWidget(self.board)
+
+    """Action connection"""
 
     def connect_exit(self, slot):
         self._exit_action.triggered.connect(slot)
@@ -95,3 +102,11 @@ class GoLWindow(QMainWindow):
 
     def connect_help(self, slot):
         self._help_action.triggered.connect(slot)
+
+    def connect_size(self, slot):
+        self.size_slider.connect(slot)
+
+    def connect_clear(self, slot):
+        self._clear_action.triggered.connect(slot)
+
+    """Utility"""
