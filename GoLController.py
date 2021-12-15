@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QTimer, QEvent
 from PyQt5.QtWidgets import QMessageBox
 
 
@@ -10,6 +11,15 @@ class GoLController:
         self._view.connect_help(self.help)
         self._view.connect_size(self.reset_model_board)
         self._view.connect_clear(self.ask_clear_confirm)
+        self._view.connect_next(self.next)
+        self._view.board.connect_mouse(self.mouse)
+        self._view.connect_run(self.run)
+        self._view.connect_pause(self.pause)
+        self._view.connect_fps(self.fps)
+
+        self._timer = QTimer()
+        self._timer.setInterval(1000 / self._view.fps_slider.value())
+        self._timer.timeout.connect(self.next)
 
         self._model = model
         self._model.observe(self.refresh_view_board)
@@ -38,3 +48,30 @@ class GoLController:
 
     def clear(self):
         self._model.reset()
+
+    def next(self):
+        self._model.next_status()
+
+    def run(self):
+        self._timer.start()
+        self._view.board.disconnect_mouse(self.mouse)
+        self._view.running_on()
+
+    def pause(self):
+        self._timer.stop()
+        self._view.board.connect_mouse(self.mouse)
+        self._view.running_off()
+
+    def fps(self):
+        self._timer.setInterval(1000 / self._view.fps_slider.value())
+
+    def mouse(self, event):
+        cell_size = int(self._view.board.px_dim / self._model.size())
+        border = (self._view.width() - cell_size * self._model.size()) / 2
+        x = int((event.x() - border) / cell_size)
+        y = int((event.y() - border) / cell_size)
+
+        if event.type() == QEvent.MouseButtonPress:
+            self._model.toggle_cell(x, y)
+        elif event.type() == QEvent.MouseMove:
+            self._model.activate_cell(x, y)

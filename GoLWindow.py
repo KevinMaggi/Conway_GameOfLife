@@ -1,5 +1,5 @@
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QMainWindow, QStyleFactory, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QStyleFactory, QMessageBox, QLabel
 
 from Action import Action
 from LabeledSlider import LabeledSlider
@@ -35,6 +35,7 @@ class GoLWindow(QMainWindow):
                                   self.style.standardIcon(self.style.SP_MediaPlay))
         self._pause_action = Action(self, "&Pause", "Pause the running", ["Ctrl+P"],
                                     self.style.standardIcon(self.style.SP_MediaPause))
+        self._pause_action.setDisabled(True)
         self._next_action = Action(self, "&Next", "Next status of the run", ["Ctrl+N"],
                                    self.style.standardIcon(self.style.SP_MediaSkipForward))
         self._clear_action = Action(self, "&Clear", "Clear the configuration", ["Ctrl+C"],
@@ -47,6 +48,7 @@ class GoLWindow(QMainWindow):
 
         """Status bar"""
         self._status_bar = self.statusBar()
+        self._running_msg = QLabel("Running...")
 
         """Menu bar"""
         self._menu_bar = self.menuBar()
@@ -109,4 +111,40 @@ class GoLWindow(QMainWindow):
     def connect_clear(self, slot):
         self._clear_action.triggered.connect(slot)
 
+    def connect_next(self, slot):
+        self._next_action.triggered.connect(slot)
+
+    def connect_run(self, slot):
+        self._run_action.triggered.connect(slot)
+
+    def connect_pause(self, slot):
+        self._pause_action.triggered.connect(slot)
+
+    def connect_fps(self, slot):
+        self.fps_slider.connect(slot)
+
     """Utility"""
+
+    def running_on(self):
+        self._status_bar.addPermanentWidget(self._running_msg)
+
+        self._pause_action.setEnabled(True)
+
+        self._run_action.setDisabled(True)
+        self._next_action.setDisabled(True)
+        self._clear_action.setDisabled(True)
+        self._save_action.setDisabled(True)
+        self._open_action.setDisabled(True)
+        self.size_slider.setDisabled(True)
+
+    def running_off(self):
+        self._status_bar.removeWidget(self._running_msg)
+
+        self._run_action.setEnabled(True)
+
+        self._pause_action.setDisabled(True)
+        self._next_action.setEnabled(True)
+        self._clear_action.setEnabled(True)
+        self._save_action.setEnabled(True)
+        self._open_action.setEnabled(True)
+        self.size_slider.setEnabled(True)
