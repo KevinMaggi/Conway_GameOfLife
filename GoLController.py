@@ -170,8 +170,9 @@ class GoLController:
         border = (self._view.width() - cell_size * self._model.size()) / 2
         x = int((event.x() - border) / cell_size)
         y = int((event.y() - border) / cell_size)
-
-        if event.type() == QEvent.MouseButtonPress:
-            self._model.toggle_cell(x, y)
-        elif event.type() == QEvent.MouseMove:
-            self._model.activate_cell(x, y)
+        print(str(x) + " " + str(y))
+        if 0 <= x < self._model.size() - 1 and 0 <= y < self._model.size() - 1:
+            if event.type() == QEvent.MouseButtonPress:
+                self._model.toggle_cell(x, y)
+            elif event.type() == QEvent.MouseMove:
+                self._model.activate_cell(x, y)
