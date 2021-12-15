@@ -48,9 +48,17 @@ class GoLController:
 
     def clear(self):
         self._model.reset()
+        self._view.set_empty()
 
     def next(self):
         self._model.next_status()
+
+        if self._model.is_empty():
+            self._view.set_empty()
+            if self._timer.isActive():
+                self.pause()
+        else:
+            self._view.set_not_empty(self._timer.isActive())
 
     def run(self):
         self._timer.start()
@@ -61,6 +69,11 @@ class GoLController:
         self._timer.stop()
         self._view.board.connect_mouse(self.mouse)
         self._view.running_off()
+
+        if self._model.is_empty():
+            self._view.set_empty()
+        else:
+            self._view.set_not_empty(self._timer.isActive())
 
     def fps(self):
         self._timer.setInterval(1000 / self._view.fps_slider.value())
@@ -75,3 +88,8 @@ class GoLController:
             self._model.toggle_cell(x, y)
         elif event.type() == QEvent.MouseMove:
             self._model.activate_cell(x, y)
+
+        if self._model.is_empty():
+            self._view.set_empty()
+        else:
+            self._view.set_not_empty(self._timer.isActive())

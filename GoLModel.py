@@ -48,3 +48,9 @@ class GoLModel:
     def activate_cell(self, i, j):
         self._board.value[i, j] = 1
         self._board.notify()
+
+    def is_empty(self):
+        if numpy.sum(self._board.value) == 0:
+            return True
+        else:
+            return False

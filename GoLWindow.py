@@ -35,7 +35,6 @@ class GoLWindow(QMainWindow):
                                   self.style.standardIcon(self.style.SP_MediaPlay))
         self._pause_action = Action(self, "&Pause", "Pause the running", ["Ctrl+P"],
                                     self.style.standardIcon(self.style.SP_MediaPause))
-        self._pause_action.setDisabled(True)
         self._next_action = Action(self, "&Next", "Next status of the run", ["Ctrl+N"],
                                    self.style.standardIcon(self.style.SP_MediaSkipForward))
         self._clear_action = Action(self, "&Clear", "Clear the configuration", ["Ctrl+C"],
@@ -94,6 +93,9 @@ class GoLWindow(QMainWindow):
         self.board = GoLBoard(self, Parameters.BOARD_PX_DIM)
         self.setCentralWidget(self.board)
 
+        """Initial status"""
+        self.set_empty()
+
     """Action connection"""
 
     def connect_exit(self, slot):
@@ -132,9 +134,9 @@ class GoLWindow(QMainWindow):
 
         self._run_action.setDisabled(True)
         self._next_action.setDisabled(True)
-        self._clear_action.setDisabled(True)
         self._save_action.setDisabled(True)
         self._open_action.setDisabled(True)
+        self._clear_action.setDisabled(True)
         self.size_slider.setDisabled(True)
 
     def running_off(self):
@@ -144,7 +146,26 @@ class GoLWindow(QMainWindow):
 
         self._pause_action.setDisabled(True)
         self._next_action.setEnabled(True)
-        self._clear_action.setEnabled(True)
         self._save_action.setEnabled(True)
         self._open_action.setEnabled(True)
+        self._clear_action.setEnabled(True)
+        self.size_slider.setDisabled(True)
+
+    def set_empty(self):
         self.size_slider.setEnabled(True)
+        self._clear_action.setDisabled(True)
+        self._run_action.setDisabled(True)
+        self.fps_slider.setDisabled(True)
+        self._pause_action.setDisabled(True)
+        self._next_action.setDisabled(True)
+
+    def set_not_empty(self, running):
+        self.size_slider.setDisabled(True)
+        self._clear_action.setEnabled(True)
+        self._run_action.setEnabled(True)
+        self.fps_slider.setEnabled(True)
+
+        if running:
+            self._next_action.setDisabled(True)
+        else:
+            self._next_action.setEnabled(True)
