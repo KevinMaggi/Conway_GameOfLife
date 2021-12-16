@@ -118,3 +118,26 @@ class GoLModel:
             return True
         else:
             return False
+
+    def save(self, filename):
+        """
+        It saves as file the current board
+        :param filename: file
+        :type filename: str
+        :return: None
+        """
+        if filename is not None and filename != '':
+            numpy.savetxt(filename, self._board.value, "%.d",
+                          header="Board population from 'Game of Life' by Kevin Maggi")
+
+    def open(self, filename):
+        """
+        It loads a saved board configuration
+        :param filename: file
+        :type filename: str
+        :return: None
+        """
+        if filename is not None and filename != '':
+            array = numpy.loadtxt(filename, int)
+            self._size = array.shape[0]
+            self._board.value = array

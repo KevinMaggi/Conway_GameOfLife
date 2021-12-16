@@ -74,7 +74,7 @@ class LabeledSlider(QWidget):
         :type new: int
         :return: None
         """
-        self._slider.setValue(new)
+        self._slider.setValue(new / self.interval)
 
     """ [CONTROLLER] """
 

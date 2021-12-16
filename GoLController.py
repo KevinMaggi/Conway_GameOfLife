@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QTimer, QEvent
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
 from GoLWindow import GoLWindow
 from GoLModel import GoLModel
@@ -56,14 +56,19 @@ class GoLController:
         It saves current board
         :return: None
         """
-        pass  # TODO
+        file = QFileDialog.getSaveFileName(self._view, "Save board population", "./examples/", "Game of Life (*.gol)")
+        if file is not None and file != ('', ''):
+            self._model.save(file[0])
 
     def open(self):
         """
         It opens saved board
         :return: None
         """
-        pass  # TODO
+        file = QFileDialog.getOpenFileName(self._view, "Load board population", "./examples/", "Game of Life (*.gol)")
+        if file is not None and file != ('', ''):
+            self._model.open(file[0])
+        self._view.size_slider.set_value(self._model.size())
 
     def exit(self):
         """
@@ -170,8 +175,8 @@ class GoLController:
         border = (self._view.width() - cell_size * self._model.size()) / 2
         x = int((event.x() - border) / cell_size)
         y = int((event.y() - border) / cell_size)
-        print(str(x) + " " + str(y))
-        if 0 <= x < self._model.size() - 1 and 0 <= y < self._model.size() - 1:
+        print(str(x) + ' ' + str(y))
+        if 0 <= x < self._model.size() and 0 <= y < self._model.size():
             if event.type() == QEvent.MouseButtonPress:
                 self._model.toggle_cell(x, y)
             elif event.type() == QEvent.MouseMove:
