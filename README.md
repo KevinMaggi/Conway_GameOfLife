@@ -10,10 +10,12 @@ Ingegneria Informatica at University of Florence.
 The program has the following features:
 
 - base features:
-  -- **Board editor**: mouse editing; -- **Simulation**: animation at **variable framerate** with **play/pause**
-  controls; -- **Next state calculation**;
+  - **Board editor**: mouse editing;
+  - **Simulation**: animation at **variable framerate** with **play/pause** controls;
+  - **Next state calculation**;
 - extra features:
-  -- **Save/Open** a board state; -- **Variable board size**.
+  - **Save/Open** a board state;
+  - **Variable board size**.
 
 # Dependencies
 
@@ -26,3 +28,7 @@ This program has the following dependencies:
 # How to run
 
 In order to run the program is sufficient to run the *main.py*
+
+# Notes
+
+All files are documented, with some indications on Model/View/Controller part in order to easily identify them.
