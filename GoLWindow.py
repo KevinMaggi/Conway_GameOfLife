@@ -160,6 +160,14 @@ class GoLWindow(QMainWindow):
         """
         self.size_slider.connect(slot)
 
+    def disconnect_size(self, slot):
+        """
+        It allow to disconnect to size change action
+        :param slot: function to invoke
+        :return: None
+        """
+        self.size_slider.disconnect_(slot)
+
     def connect_run(self, slot):
         """
         It allow to connect to run action

@@ -68,7 +68,11 @@ class GoLController:
         file = QFileDialog.getOpenFileName(self._view, "Load board population", "./examples/", "Game of Life (*.gol)")
         if file is not None and file != ('', ''):
             self._model.open(file[0])
+
+        self._view.disconnect_size(
+            self.reset_model_board)  # momentarily disconnect to not overwrite board on size change
         self._view.size_slider.set_value(self._model.size())
+        self._view.connect_size(self.reset_model_board)
 
     def exit(self):
         """

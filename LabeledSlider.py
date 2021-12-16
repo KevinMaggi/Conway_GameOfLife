@@ -60,6 +60,14 @@ class LabeledSlider(QWidget):
         """
         self._slider.valueChanged.connect(slot)
 
+    def disconnect_(self, slot):
+        """
+        It allows to disconnect with the change of slider value
+        :param slot: function to invoke
+        :return: None
+        """
+        self._slider.valueChanged.disconnect(slot)
+
     def value(self):
         """
         It returns the external value
