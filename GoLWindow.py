@@ -90,7 +90,7 @@ class GoLWindow(QMainWindow):
 
         """Secondary windows & dialog"""
         self.info_window = InfoWindow(self, self.style.standardIcon(self.style.SP_MessageBoxInformation))
-        self.help_window = HelpWindow(self.style.standardIcon(self.style.SP_DialogHelpButton))
+        self.help_window = HelpWindow(self, self.style.standardIcon(self.style.SP_DialogHelpButton))
         self.clear_confirm = QMessageBox(QMessageBox.Question, "Are you sure?",
                                          "The board will be cleared and it will be impossible to undo the operation",
                                          QMessageBox.Cancel | QMessageBox.Ok, self)
