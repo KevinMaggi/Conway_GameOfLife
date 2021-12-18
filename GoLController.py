@@ -124,7 +124,7 @@ class GoLController:
         It refresh the view board and interface
         :return: None
         """
-        self._view.board.refresh(self._model.board())
+        self._view.board.refresh(self._model.board_enriched())
 
         if self._model.is_empty():
             self._view.set_empty()

@@ -16,6 +16,7 @@ The program has the following features:
 - extra features:
   - **Save/Open** a board state;
   - **Variable board size**.
+  - **Cell history**
 
 # Dependencies
 
