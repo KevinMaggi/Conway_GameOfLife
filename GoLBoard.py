@@ -2,7 +2,7 @@ import numpy
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QBrush, QPen
+from PyQt5.QtGui import QBrush, QPen, QColor
 from PyQt5.QtWidgets import QWidget, QGraphicsView, QGraphicsScene
 
 
@@ -48,10 +48,14 @@ class GoLBoard(QGraphicsView):
 
         for i in range(cell_dim):
             for j in range(cell_dim):
-                if board[i, j] == 0:
+                if board[i, j] == 0:  # free spot that was already free
                     brush = QBrush(QtCore.Qt.white)
-                else:
-                    brush = QBrush(QtCore.Qt.green)
+                elif board[i, j] == 1:  # still alive cell
+                    brush = QBrush(QColor(0, 150, 0))
+                elif board[i, j] == -1:  # just dead cell
+                    brush = QBrush(QColor(215, 215, 215))
+                elif board[i, j] == 2:  # newly born cell
+                    brush = QBrush(QColor(0, 215, 0))
                 self.scene.addRect(i * cell_size, j * cell_size, cell_size, cell_size, QPen(QtCore.Qt.black), brush)
 
     def mousePressEvent(self, event):

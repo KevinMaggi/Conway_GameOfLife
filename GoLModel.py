@@ -28,6 +28,7 @@ class GoLModel:
         :type size: int
         """
         self._board = Observable()
+        self._last_board = numpy.zeros((size, size), numpy.int)
         self._size = size
         self.reset(self._size)
 
@@ -40,6 +41,7 @@ class GoLModel:
         """
         if size is not None:
             self._size = size
+        self._last_board = numpy.zeros((self._size, self._size), numpy.int)  # update of actual must be last op
         self._board.value = numpy.zeros((self._size, self._size), numpy.int)
 
     def board(self):
@@ -48,6 +50,13 @@ class GoLModel:
         :return: ndarray
         """
         return self._board.value
+
+    def board_enriched(self):
+        """
+        It returns the board enriched with history details (as matrix)
+        :return: ndarray
+        """
+        return numpy.add(self._board.value, numpy.subtract(self._board.value, self._last_board))
 
     def size(self):
         """
@@ -70,6 +79,7 @@ class GoLModel:
         :return: None
         """
         actual = self._board.value
+        self._last_board = actual
         convolution = signal.convolve2d(actual, self.KERNEL, 'same', 'fill')
         new = numpy.zeros((self._size, self._size), numpy.int)
         new[convolution == 12] = 1  # if the cell has 2 neighbours
@@ -140,4 +150,5 @@ class GoLModel:
         if filename is not None and filename != '':
             array = numpy.loadtxt(filename, int)
             self._size = array.shape[0]
+            self._last_board = numpy.zeros((self._size, self._size), numpy.int)  # update of actual must be last op
             self._board.value = array
