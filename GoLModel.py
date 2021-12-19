@@ -129,6 +129,16 @@ class GoLModel:
         else:
             return False
 
+    def is_empty_enriched(self):
+        """
+        It allows to check if the board is empty or not (also considering history details)
+        :return: bool
+        """
+        if numpy.sum(self._board.value) == 0 and numpy.sum(self._last_board) == 0:
+            return True
+        else:
+            return False
+
     def save(self, filename):
         """
         It saves as file the current board

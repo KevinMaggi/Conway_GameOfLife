@@ -126,7 +126,7 @@ class GoLController:
         """
         self._view.board.refresh(self._model.board_enriched())
 
-        if self._model.is_empty():
+        if self._model.is_empty_enriched():
             self._view.set_empty()
             if self._timer.isActive():
                 self.pause()
@@ -158,7 +158,7 @@ class GoLController:
         self._view.board.connect_mouse(self.mouse)
         self._view.running_off()
 
-        if self._model.is_empty():
+        if self._model.is_empty_enriched():
             self._view.set_empty()
         else:
             self._view.set_not_empty(self._timer.isActive())
